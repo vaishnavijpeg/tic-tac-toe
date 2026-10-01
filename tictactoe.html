@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tic Tac Toe</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    .board {
+      width: 300px;
+      margin: 30px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      border: 1px solid black;
+      font-size: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Tic Tac Toe</h1>
+
+  <h2 id="status">Player X's Turn</h2>
+
+  <div class="board">
+    <div class="cell" onclick="playGame(0)"></div>
+    <div class="cell" onclick="playGame(1)"></div>
+    <div class="cell" onclick="playGame(2)"></div>
+
+    <div class="cell" onclick="playGame(3)"></div>
+    <div class="cell" onclick="playGame(4)"></div>
+    <div class="cell" onclick="playGame(5)"></div>
+
+    <div class="cell" onclick="playGame(6)"></div>
+    <div class="cell" onclick="playGame(7)"></div>
+    <div class="cell" onclick="playGame(8)"></div>
+  </div>
+
+  <button onclick="resetGame()">Restart Game</button>
+
+  <script>
+    let currentPlayer = "X";
+
+    let board = [
+      "", "", "",
+      "", "", "",
+      "", "", ""
+    ];
+
+    let gameOver = false;
+
+    const winningCombinations = [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+
+      [0, 4, 8],
+      [2, 4, 6]
+    ];
+
+    function playGame(index) {
+
+      if (board[index] !== "" || gameOver) {
+        return;
+      }
+
+      board[index] = currentPlayer;
+
+      const cells = document.querySelectorAll(".cell");
+
+      cells[index].innerText = currentPlayer;
+
+      if (checkWinner()) {
+        document.getElementById("status").innerText =
+          "Player " + currentPlayer + " Wins!";
+
+        gameOver = true;
+        return;
+      }
+
+      if (!board.includes("")) {
+        document.getElementById("status").innerText = "Game Draw!";
+        gameOver = true;
+        return;
+      }
+
+      if (currentPlayer === "X") {
+        currentPlayer = "O";
+      } else {
+        currentPlayer = "X";
+      }
+
+      document.getElementById("status").innerText =
+        "Player " + currentPlayer + "'s Turn";
+    }
+
+    function checkWinner() {
+
+      for (let combination of winningCombinations) {
+
+        const [a, b, c] = combination;
+
+        if (
+          board[a] !== "" &&
+          board[a] === board[b] &&
+          board[a] === board[c]
+        ) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    function resetGame() {
+
+      board = [
+        "", "", "",
+        "", "", "",
+        "", "", ""
+      ];
+
+      currentPlayer = "X";
+      gameOver = false;
+
+      const cells = document.querySelectorAll(".cell");
+
+      cells.forEach(function(cell) {
+        cell.innerText = "";
+      });
+
+      document.getElementById("status").innerText =
+        "Player X's Turn";
+    }
+  </script>
+
+</body>
+</html>
